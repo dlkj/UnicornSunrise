@@ -110,7 +110,7 @@ def white_background():
 
 
 # function for drawing outlined text
-def outline_text(text, x, y):
+def outline_text(text, x, y, brightness = 255):
     graphics.set_pen(BLACK)
     graphics.text(text, x - 1, y - 1, -1, 1)
     graphics.text(text, x, y - 1, -1, 1)
@@ -121,7 +121,8 @@ def outline_text(text, x, y):
     graphics.text(text, x, y + 1, -1, 1)
     graphics.text(text, x + 1, y + 1, -1, 1)
 
-    graphics.set_pen(WHITE)
+    text_pen = graphics.create_pen(brightness, brightness, brightness)
+    graphics.set_pen(text_pen)
     graphics.text(text, x, y, -1, 1)
 
 
@@ -143,7 +144,7 @@ def sync_time():
             break
         max_wait -= 1
         print('waiting for connection...')
-        time.sleep(0.2)
+        time.sleep(0.5)
 
         # redraw_display()
         white_background()
@@ -216,7 +217,13 @@ def draw_clock_text(hour, minute, second, utc_offset):
         x = int(width / 2 - w / 2 + 1)
         y = 2
 
-        outline_text(clock, x, y)
+        print(f'{gu.light()}')
+        if gu.light() < 20:
+            brightness = 50
+        else:
+            brightness = 255
+
+        outline_text(clock, x, y, brightness)
 
 def redraw_display():
     global year, month, day, wd, hour, minute, second, last_second
